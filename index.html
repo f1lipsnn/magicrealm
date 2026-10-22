@@ -2918,7 +2918,7 @@ function buildGuide(){const el=document.getElementById("guide");if(!el||el.datas
  el.addEventListener("keydown",e=>{if(e.key==="Escape"){e.stopPropagation();close()}});}
 function openGuide(){buildGuide();const el=document.getElementById("guide");el.hidden=false;el.querySelector(".gpanel").scrollTop=0;setTimeout(()=>el.querySelector("#gSober").focus({preventScroll:true}),30)}
 document.getElementById("helpBtn").onclick=openGuide;
-(()=>{let seen=false;try{seen=!!localStorage.getItem(GUIDE_KEY)}catch(e){}if(!seen)openGuide()})();
+openGuide();
 /* ======================= TRIPPING RIGHT NOW ======================= */
 /* Two ways to travel the atlas. Sober: read it at your own pace.
    Tripping right now: the realm breathes, draws you down into the Sea Without Shores,
