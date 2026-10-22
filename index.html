@@ -2,7 +2,7 @@
 <title>The Psychedelic Realm</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;1,400;1,500&family=Alegreya+SC:wght@500;700&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;1,400;1,500&family=Alegreya+SC:wght@500;700&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Fondamento:ital@0;1&display=swap">
 <style>
 /* Layout: one painted piece, like a game's map screen. A dark carved frame holds a top bar, the ring-bordered
    realm on the left and a parchment journal on the right, joined by a gilt seam; key hints run along the bottom. */
@@ -269,6 +269,97 @@ label.f{display:grid;gap:2px;margin-bottom:12px;font-family:var(--f-ui);font-siz
 @keyframes gemP{0%{--p:.78}19%{--p:.96}33%{--p:.84}51%{--p:1}66%{--p:.8}83%{--p:.93}100%{--p:.78}}
 @keyframes gemF{0%{--p:.1;transform:scale(.96)}30%{--p:.72;transform:scale(1)}100%{--p:0;transform:scale(1.1)}}
 @media (prefers-reduced-motion:reduce){.crys .glw,.crys .fog{animation:none}}
+/* ---------- tripping right now ---------- */
+.mapinner{position:absolute;inset:0;transform-origin:50% 50%}
+#trip{position:absolute;display:block;left:-20%;top:-20%;width:140%;height:140%;transform-origin:50% 50%;pointer-events:none;overflow:visible;transition:opacity .6s}
+#trip.gone{opacity:0}
+#trip .fp-ink{fill:#2a140a}#trip .fp-bleed{fill:#6a3418;opacity:.3}
+#trip .way{opacity:0;transition:opacity .7s}
+#trip.show .way{opacity:1}
+#trip .road{fill:none;stroke:#7a2414;stroke-width:.85;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;opacity:.5}
+#trip.show .road{stroke-dashoffset:0;transition:stroke-dashoffset 1.7s cubic-bezier(.3,.1,.2,1) calc(var(--i)*.15s + .15s)}
+#trip .dots{fill:none;stroke:#7a2414;stroke-width:1.5;stroke-linecap:round;stroke-dasharray:.01 5.25;opacity:0}
+#trip.show .dots{opacity:.28;transition:opacity 1.2s calc(var(--i)*.15s + 1.4s)}
+#trip .fps use{opacity:0}
+#trip.show .fps use{animation:fpIn .55s ease-out forwards;animation-delay:calc(var(--i)*.15s + var(--d)*1s)}
+@keyframes fpIn{0%{opacity:0}40%{opacity:.55}100%{opacity:.24}}
+#trip .ph use,#trip .tp{opacity:0;transform-box:fill-box;transform-origin:center}
+#trip .hit{fill:none;stroke:transparent;stroke-width:18;pointer-events:stroke;cursor:pointer}
+#trip .lab{font-family:'Fondamento','IM Fell English',Georgia,serif;font-style:italic;fill:#a3170f;stroke:#f7ecd2;stroke-width:2.6;stroke-opacity:.8;stroke-linejoin:round;paint-order:stroke;letter-spacing:.35px;white-space:pre;pointer-events:auto;cursor:pointer;outline:none}
+#trip .lab tspan,#trip .srcring tspan,#trip .insc tspan{opacity:0}
+#trip.show .lab tspan{animation:inkIn .4s ease-out forwards;animation-delay:calc(var(--i)*.15s + 1.25s + var(--c)*.05s)}
+#trip .srcring{font-family:'Fondamento','IM Fell English',Georgia,serif;font-style:italic;fill:#a3170f;letter-spacing:1.6px;white-space:pre;opacity:.85}
+#trip.show .srcring tspan{animation:inkIn .4s ease-out forwards;animation-delay:calc(.2s + var(--c)*.035s)}
+#trip .insc{font-family:'Fondamento','IM Fell English',Georgia,serif;font-style:italic;fill:#a3170f;stroke:#f7ecd2;stroke-width:3;stroke-opacity:.85;paint-order:stroke;white-space:pre}
+#trip .insc tspan{animation:inkIn .45s ease-out forwards;animation-delay:calc(.35s + var(--c)*.07s)}
+@keyframes inkIn{0%{opacity:0}100%{opacity:1}}
+#trip .way:hover .road,#trip .way:focus-within .road{opacity:.95;stroke-width:1.3}
+#trip .way:hover .lab,#trip .way:focus-within .lab{fill:#d0150c}
+#trip .way:hover .dots{opacity:.75}
+#trip.walking .way:not(.sel){opacity:.2}
+#trip.walking .way.sel .lab{fill:#d0150c}
+#trip .lamp{fill:var(--lc);opacity:.55;filter:blur(7px);mix-blend-mode:screen;pointer-events:none}
+#trip .spark{fill:none;stroke-width:.9;transform-box:fill-box;transform-origin:center;pointer-events:none}
+#trip .rip{fill:none;stroke:#a3170f;stroke-width:1.1;transform-box:fill-box;transform-origin:center;opacity:0}
+#trip.moving *{animation-play-state:paused!important}
+/* while tripping the ways come first: the island banners let a touch fall through to the way beneath */
+.mapwrap.trip #ov .mk.rib{pointer-events:none}
+/* a faint iridescence over the whole chart while tripping */
+.tf-amb{position:absolute;inset:-40%;pointer-events:none;opacity:0;transition:opacity 2s;background:conic-gradient(from 0deg,#ff4f8a,#ffc04f,#d8ff4f,#4fffa0,#4fd8ff,#8a4fff,#ff4fd8,#ff4f8a);mix-blend-mode:soft-light;animation:tfSpin 90s linear infinite}
+.mapwrap.trip .tf-amb{opacity:.2}
+/* the visions */
+.tripfx{position:absolute;inset:0;overflow:hidden;cursor:pointer}
+.tripfx[hidden]{display:none}
+.tripfx .tf{position:absolute;pointer-events:none}
+.tripfx .hue{inset:-60%;background:conic-gradient(from 0deg,#ff2d6f,#ffb02d,#e8ff2d,#2dff8a,#2dd5ff,#7a2dff,#ff2dd5,#ff2d6f);mix-blend-mode:hue;opacity:0;transition:opacity 1.6s;animation:tfSpin 11s linear infinite}
+.tripfx.on .hue{opacity:.14}.tripfx.on.in .hue{opacity:.24}.tripfx.dive .hue{opacity:.62;transition:opacity 2.6s}.tripfx.emerge .hue{opacity:.08;transition:opacity 2.4s}
+.tripfx .mand{left:50%;top:50%;width:120%;aspect-ratio:1;margin-left:-60%;margin-top:-60%;opacity:0;transform:scale(.7);transition:opacity 1.6s,transform 1.8s ease-out;mix-blend-mode:screen}
+.tripfx .mand .spin{width:100%;height:100%;animation:tfSpin 40s linear infinite}.tripfx .m1 .spin{animation-duration:55s;animation-direction:reverse}.tripfx .m2 .spin{animation-duration:80s}
+.tripfx .mand svg{width:100%;height:100%;display:block}
+.tripfx.on .m0{opacity:.32;transform:scale(.62)}.tripfx.on .m1{opacity:.22;transform:scale(.9)}.tripfx.on .m2{opacity:.28;transform:scale(1.15)}
+.tripfx.on.in .mand{transform:scale(.8)}
+.tripfx.dive .mand{opacity:.75;transform:scale(2.6);transition:opacity 1s,transform 3.4s cubic-bezier(.55,0,.9,.4)}.tripfx.dive .m1{transform:scale(3.2)}.tripfx.dive .m2{transform:scale(3.8)}
+.tripfx.dive .mand .spin{animation-duration:9s}
+.tripfx.emerge .mand{opacity:0;transform:scale(.3);transition:opacity 2.2s,transform 2.8s ease-out}
+.tripfx .tun{inset:0;opacity:0;transition:opacity .9s}
+.tripfx.dive .tun{opacity:1}
+.tripfx .tun i{position:absolute;left:50%;top:50%;width:64%;aspect-ratio:1;margin-left:-32%;margin-top:-32%;border-radius:50%;opacity:0;
+ background:conic-gradient(from 0deg,#ff2d6f,#ffb02d,#e8ff2d,#2dff8a,#2dd5ff,#7a2dff,#ff2dd5,#ff2d6f);
+ -webkit-mask:radial-gradient(closest-side,transparent 88%,#000 92%,#000 96%,transparent 99%);mask:radial-gradient(closest-side,transparent 88%,#000 92%,#000 96%,transparent 99%);mix-blend-mode:screen;animation:tfTun 2.3s cubic-bezier(.6,0,1,.5) infinite}
+.tripfx .tun i:nth-child(2){animation-delay:-.33s}.tripfx .tun i:nth-child(3){animation-delay:-.66s}.tripfx .tun i:nth-child(4){animation-delay:-.99s}.tripfx .tun i:nth-child(5){animation-delay:-1.32s}.tripfx .tun i:nth-child(6){animation-delay:-1.65s}.tripfx .tun i:nth-child(7){animation-delay:-1.98s}
+.tripfx .vig{inset:0;background:radial-gradient(ellipse at center,transparent 30%,rgba(28,6,40,.5) 68%,rgba(10,0,18,.88));opacity:0;transition:opacity 1.4s}
+.tripfx.on .vig{opacity:.75;animation:tfBreath 3.4s ease-in-out infinite}.tripfx.dive .vig{opacity:1}.tripfx.emerge .vig{opacity:0;transition:opacity 2.6s}
+.tripfx .flash{left:50%;top:50%;width:110%;aspect-ratio:1;margin-left:-55%;margin-top:-55%;border-radius:50%;opacity:0;transform:scale(.25);
+ background:radial-gradient(closest-side,#fff 0,#fffbea 16%,rgba(255,226,160,.85) 34%,rgba(255,160,210,.35) 60%,transparent 100%);mix-blend-mode:screen}
+.tripfx.flash .flash{animation:tfFlash 1.6s ease-out forwards}
+.tripfx .tskip{position:absolute;left:0;right:0;bottom:16px;text-align:center;font-family:'IM Fell English',Georgia,serif;font-style:italic;font-size:13px;letter-spacing:.12em;color:rgba(255,244,226,.72);text-shadow:0 0 6px rgba(0,0,0,.7);opacity:0;transition:opacity 1s 2.5s;pointer-events:none}
+.tripfx.on .tskip{opacity:1}
+@keyframes tfSpin{to{transform:rotate(360deg)}}
+@keyframes tfTun{0%{transform:scale(.04) rotate(0);opacity:0}18%{opacity:.85}100%{transform:scale(3.4) rotate(50deg);opacity:0}}
+@keyframes tfBreath{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+@keyframes tfFlash{0%{opacity:0;transform:scale(.25)}22%{opacity:1;transform:scale(1.05)}100%{opacity:0;transform:scale(1.9)}}
+/* the captions */
+.tcap{position:absolute;left:8%;right:8%;top:16%;text-align:center;pointer-events:none;font-family:'Fondamento','IM Fell English',Georgia,serif;font-style:italic;font-size:clamp(19px,2.5vw,32px);line-height:1.25;
+ color:#fff7e8;text-shadow:0 0 10px rgba(255,140,110,.85),0 0 26px rgba(255,70,150,.55),0 0 2px rgba(60,10,30,.9);opacity:0;filter:blur(7px);transform:translateY(6px);transition:opacity .9s,filter 1.1s,transform 1.1s}
+.tcap.show{opacity:1;filter:blur(0);transform:none}
+.tcap.ink{color:#9a1209;text-shadow:0 0 4px rgba(255,248,230,.95),0 0 12px rgba(255,248,230,.85),0 0 22px rgba(255,248,230,.6);top:9.5%;font-size:clamp(16px,1.9vw,24px)}
+/* the mode seal in the header */
+.help.mode{background:radial-gradient(circle at 35% 30%,#2c3a52,#0e1420);color:#cfe0ff;padding:0}
+.help.mode svg{width:20px;height:20px;display:block;margin:auto}
+.help.mode.on{background:radial-gradient(circle at 35% 30%,#5a2a7a,#1a0a2a);color:#fff;box-shadow:0 0 0 2px #2a2014,0 0 10px 2px rgba(255,120,220,.55);animation:modeGlow 6s linear infinite}
+@keyframes modeGlow{0%,100%{box-shadow:0 0 0 2px #2a2014,0 0 10px 2px rgba(255,120,220,.55)}33%{box-shadow:0 0 0 2px #2a2014,0 0 10px 2px rgba(120,220,255,.6)}66%{box-shadow:0 0 0 2px #2a2014,0 0 10px 2px rgba(255,210,110,.6)}}
+/* the two ways to travel, at the foot of the guide */
+.gmodes{display:flex;gap:12px;flex-wrap:wrap}
+.gbtn.mode{display:flex;flex-direction:column;align-items:flex-start;gap:1px;padding:8px 18px 9px;text-align:left;min-width:190px}
+.gbtn.mode small{font-family:var(--f-map);font-style:italic;font-size:12.5px;letter-spacing:.02em;opacity:.85;text-transform:none}
+.gbtn.sober{background:linear-gradient(#f3e4ba,#dcc28a);color:#3a2410;border-color:#6a4a20;box-shadow:inset 0 0 0 2px rgba(255,255,255,.35),0 2px 5px rgba(0,0,0,.3)}
+.gbtn.sober:hover{background:linear-gradient(#f8ecc8,#e4cb95)}
+.gbtn.tripb{position:relative;background:linear-gradient(135deg,#2a0f3a,#12061e 60%,#1f0b2c);color:#ffeefc;border:1px solid transparent;overflow:hidden;isolation:isolate}
+.gbtn.tripb::before{content:"";position:absolute;inset:-60%;z-index:-2;background:conic-gradient(from 0deg,#ff2d6f,#ffb02d,#e8ff2d,#2dff8a,#2dd5ff,#7a2dff,#ff2dd5,#ff2d6f);animation:tfSpin 5s linear infinite}
+.gbtn.tripb::after{content:"";position:absolute;inset:2px;z-index:-1;border-radius:1px;background:linear-gradient(135deg,#2c0f3c,#12061e 60%,#22092e)}
+.gbtn.tripb:hover::after{background:linear-gradient(135deg,#3a1450,#1a0a2a 60%,#2e0d3e)}
+@media (prefers-reduced-motion:reduce){.tf-amb,.tripfx .hue,.tripfx .mand .spin,.tripfx .tun i,.gbtn.tripb::before,.help.mode.on{animation:none}}
+.seals{display:flex;gap:9px;align-items:center}
 /* the traveller's guide */
 .help{flex:none;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--gilt2);background:radial-gradient(circle at 35% 30%,#8a2a1c,#4a120a);color:#f6e2b0;font-family:var(--f-sc);font-size:17px;line-height:1;cursor:pointer;display:grid;place-items:center;box-shadow:0 0 0 2px #2a2014,0 0 8px rgba(246,221,133,.25)}
 .help:hover{box-shadow:0 0 0 2px #2a2014,0 0 12px rgba(246,221,133,.6)}
@@ -310,12 +401,12 @@ label.f{display:grid;gap:2px;margin-bottom:12px;font-family:var(--f-ui);font-siz
       <button role="tab" data-tab="codex" aria-selected="false">Codex</button>
     </nav>
     <div class="explored" id="explored"></div>
-    <button class="help" id="helpBtn" aria-label="Open the traveller’s guide" title="The traveller’s guide">?</button>
+    <span class="seals"><button class="help mode" id="modeBtn" aria-pressed="false"><svg viewBox="-10 -10 20 20" aria-hidden="true"><path d="M0.33,0.23L0.37,0.37L0.37,0.53L0.32,0.69L0.22,0.85L0.07,1.00L-0.12,1.12L-0.35,1.19L-0.62,1.22L-0.90,1.18L-1.18,1.08L-1.46,0.92L-1.71,0.69L-1.93,0.39L-2.09,0.05L-2.18,-0.35L-2.19,-0.77L-2.13,-1.21L-1.97,-1.65L-1.72,-2.07L-1.38,-2.45L-0.96,-2.77L-0.46,-3.01L0.09,-3.17L0.68,-3.22L1.29,-3.16L1.90,-2.98L2.48,-2.68L3.02,-2.26L3.48,-1.74L3.85,-1.12L4.11,-0.43L4.24,0.33L4.23,1.11L4.07,1.90L3.76,2.67L3.31,3.38L2.72,4.02L2.00,4.55L1.18,4.95L0.28,5.21L-0.67,5.29L-1.64,5.20L-2.60,4.93L-3.52,4.48L-4.35,3.86L-5.08,3.08L-5.66,2.16L-6.07,1.13L-6.30,0.03L-6.32,-1.12L-6.13,-2.27L-5.73,-3.40L-5.12,-4.44L-4.31,-5.38L-3.34,-6.17L-2.22,-6.79L-0.98,-7.19L0.33,-7.37L1.67,-7.31L3.00,-7.01L4.27,-6.46L5.44,-5.67L6.47,-4.68L7.31,-3.50L7.93,-2.16L8.31,-0.72" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button class="help" id="helpBtn" aria-label="Open the traveller’s guide" title="The traveller’s guide">?</button></span>
   </header>
 
   <main class="stage">
     <section class="mapwrap" id="mapwrap" aria-label="Map of the realm">
-      <div class="mapclip"><canvas id="under" aria-hidden="true"></canvas><svg id="map" viewBox="0 0 1200 960" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Map of the psychedelic realm">
+      <div class="mapclip"><div class="mapinner"><canvas id="under" aria-hidden="true"></canvas><svg id="map" viewBox="0 0 1200 960" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Map of the psychedelic realm">
         <defs>
           <pattern id="cloudPat" width="44" height="38" patternUnits="userSpaceOnUse"><rect width="44" height="38" fill="#c9c2a8"/><g fill="none" stroke="#8f8670" stroke-width="1.2"><path d="M12 12a2 2 0 1 1 4 0a5 5 0 1 1-10 0a8 8 0 1 1 16 0"/><path d="M34 30a2 2 0 1 1 4 0a5 5 0 1 1-10 0a8 8 0 1 1 16 0"/></g></pattern>
           <pattern id="fieldPat" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(20)"><rect width="5" height="5" fill="#d4c97f"/><path d="M0 0v5" stroke="#aa9f55" stroke-width="1.3"/></pattern>
@@ -335,7 +426,7 @@ label.f{display:grid;gap:2px;margin-bottom:12px;font-family:var(--f-ui);font-siz
           <filter id="drop" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="1.2" dy="2" stdDeviation="1.4" flood-color="#000" flood-opacity=".4"/></filter>
         </defs>
         <g id="world"></g>
-      </svg><svg id="ov" xmlns="http://www.w3.org/2000/svg" aria-label="Places on the map"></svg></div>
+      </svg><svg id="trip" xmlns="http://www.w3.org/2000/svg" aria-label="Ways from the Sea Without Shores"></svg><svg id="ov" xmlns="http://www.w3.org/2000/svg" aria-label="Places on the map"></svg></div><div class="tf-amb" aria-hidden="true"></div><div class="tripfx" id="tripfx" hidden></div><div class="tcap" id="tcap" aria-live="polite"></div></div>
       <div class="frame" id="frame" aria-hidden="true"></div>
       <div class="zoomctl"><button id="zin" aria-label="Zoom in">+</button><button id="zout" aria-label="Zoom out">−</button><button id="zall" aria-label="Show the whole realm">⌂</button></div>
       <div class="toast" id="toast"></div>
@@ -2352,11 +2443,12 @@ function buildFrame(){
    the drawn sheet glides as one layer, a soft painted copy (#under) fills the edges,
    and the markers are placed in screen space so they stay crisp and keep their size.
    The sheet is redrawn sharp once, when the camera comes to rest. */
-const svg=document.getElementById("map"),wrap=document.getElementById("mapwrap"),clipEl=svg.parentNode,ov=document.getElementById("ov"),ucv=document.getElementById("under");
+const svg=document.getElementById("map"),wrap=document.getElementById("mapwrap"),clipEl=document.querySelector(".mapclip"),ov=document.getElementById("ov"),ucv=document.getElementById("under"),tsvg=document.getElementById("trip");
+let camHook=null,pendingCam=null;
 const OS=1.4,ZMIN=190;
 let vb=[0,0,1200,960],anim=null,vbC=vb.slice(),idleT=null,moving=false,CB=null,ZMAX=2600,homeLock=true,MK=[],OX=0,OY=0;
 function box(){if(!CB){const R=clipEl.getBoundingClientRect(),w=R.width||800,h=R.height||640;CB={w,h};OX=Math.round(w*(OS-1)/2);OY=Math.round(h*(OS-1)/2);
-  svg.style.left=-OX+"px";svg.style.top=-OY+"px";svg.style.width=`calc(100% + ${2*OX}px)`;svg.style.height=`calc(100% + ${2*OY}px)`;
+  [svg,tsvg].forEach(el=>{el.style.left=-OX+"px";el.style.top=-OY+"px";el.style.width=`calc(100% + ${2*OX}px)`;el.style.height=`calc(100% + ${2*OY}px)`});
   const m=Math.min(w,h*AR);ZMAX=Math.max(1180*m/w,1010*m/h)*1.8}return CB}
 function sOf(v){const b=box();return Math.min(b.w/v[2],b.h/v[3])}
 function clampVB(v){box();let [x,y,w]=v;w=Math.max(ZMIN,Math.min(ZMAX,w));const h=w/AR;x=Math.max(-w*.3,Math.min(W-w*.7,x));y=Math.max(-h*.3,Math.min(H-h*.7,y));return[x,y,w,h]}
@@ -2371,13 +2463,13 @@ function placeMarks(s){const b=box(),cx=vb[0]+vb[2]/2,cy=vb[1]+vb[3]/2,k=(Math.m
  for(const m of MK)m.el.setAttribute("transform",`translate(${(hx+(m.x-cx)*s).toFixed(1)} ${(hy+(m.y-cy)*s).toFixed(1)}) scale(${k})`);
  ov.classList.toggle("near",vb[2]/W<.6)}
 function commitVB(){clearTimeout(idleT);idleT=null;const b=box(),s=sOf(vb),cx=vb[0]+vb[2]/2,cy=vb[1]+vb[3]/2;vbC=vb.slice();
- svg.setAttribute("viewBox",[cx-(b.w/2+OX)/s,cy-(b.h/2+OY)/s,(b.w+2*OX)/s,(b.h+2*OY)/s].map(v=>v.toFixed(3)).join(" "));
- svg.style.transform="";if(moving){moving=false;svg.classList.remove("moving")}
+ const vbs=[cx-(b.w/2+OX)/s,cy-(b.h/2+OY)/s,(b.w+2*OX)/s,(b.h+2*OY)/s].map(v=>v.toFixed(3)).join(" ");svg.setAttribute("viewBox",vbs);tsvg.setAttribute("viewBox",vbs);
+ svg.style.transform=tsvg.style.transform="";if(moving){moving=false;svg.classList.remove("moving");tsvg.classList.remove("moving")}
  placeUnder(s);showUnder(false);placeMarks(s)}
 function applyVB(){cacheMarks();commitVB()}
 function moveVB(){const sC=sOf(vbC),sV=sOf(vb),k=sV/sC,tx=((vbC[0]+vbC[2]/2)-(vb[0]+vb[2]/2))*sV,ty=((vbC[1]+vbC[3]/2)-(vb[1]+vb[3]/2))*sV;
- if(!moving){moving=true;svg.classList.add("moving")}
- svg.style.transform=`translate(${tx.toFixed(2)}px,${ty.toFixed(2)}px) scale(${k.toFixed(5)})`;
+ if(!moving){moving=true;svg.classList.add("moving");tsvg.classList.add("moving")}
+ svg.style.transform=tsvg.style.transform=`translate(${tx.toFixed(2)}px,${ty.toFixed(2)}px) scale(${k.toFixed(5)})`;
  const b=box();showUnder(!((b.w/2+OX)*k>=b.w/2+Math.abs(tx)+1&&(b.h/2+OY)*k>=b.h/2+Math.abs(ty)+1));
  placeUnder(sV);placeMarks(sV);
  clearTimeout(idleT);idleT=setTimeout(commitVB,170)}
@@ -2393,7 +2485,7 @@ function toSvg(px,py){const R=clipEl.getBoundingClientRect(),s=sOf(vb);return{x:
 function zoomAt(f,px,py){const p=px==null?{x:vb[0]+vb[2]/2,y:vb[1]+vb[3]/2}:toSvg(px,py);const w=vb[2]*f;setVB([p.x-(p.x-vb[0])*f,p.y-(p.y-vb[1])*f,w])}
 /* the wheel sets a target and the camera eases toward it, one step per frame */
 let zt=null,zRaf=0;
-wrap.addEventListener("wheel",e=>{e.preventDefault();if(anim){cancelAnimationFrame(anim);anim=null}
+wrap.addEventListener("wheel",e=>{e.preventDefault();if(tripLock)return;if(camHook)camHook();if(anim){cancelAnimationFrame(anim);anim=null}
  const d=(e.deltaMode===1?e.deltaY*32:e.deltaMode===2?e.deltaY*400:e.deltaY)*(e.ctrlKey?4:1);
  zt={w:Math.max(ZMIN,Math.min(ZMAX,(zt?zt.w:vb[2])*Math.pow(1.0017,d))),x:e.clientX,y:e.clientY};
  if(!zRaf)zRaf=requestAnimationFrame(zStep)},{passive:false});
@@ -2401,7 +2493,7 @@ function zStep(){zRaf=0;if(!zt)return;const f0=zt.w/vb[2],w0=vb[2];
  if(Math.abs(Math.log(f0))<.004){zoomAt(f0,zt.x,zt.y);zt=null;return}
  zoomAt(Math.pow(f0,.3),zt.x,zt.y);if(Math.abs(vb[2]-w0)<1e-6){zt=null;return}zRaf=requestAnimationFrame(zStep)}
 const ptrs=new Map();let drag=null,pinch=null;
-wrap.addEventListener("pointerdown",e=>{if(e.target.closest(".zoomctl"))return;if(anim){cancelAnimationFrame(anim);anim=null}zt=null;
+wrap.addEventListener("pointerdown",e=>{if(e.target.closest(".zoomctl")||tripLock)return;if(camHook)camHook();if(anim){cancelAnimationFrame(anim);anim=null}zt=null;
  ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
  if(ptrs.size===1)drag={x:e.clientX,y:e.clientY,vb:vb.slice(),moved:false,target:e.target,hist:[[performance.now(),e.clientX,e.clientY]]};
  if(ptrs.size===2){const [a,b]=[...ptrs.values()];pinch={d:Math.hypot(a.x-b.x,a.y-b.y)||1,vb:vb.slice()};drag=null}});
@@ -2422,12 +2514,12 @@ const endPtr=e=>{const d=drag;ptrs.delete(e.pointerId);if(ptrs.size<2)pinch=null
  if(d&&!d.moved&&e.type==="pointerup")activate(d.target)};
 wrap.addEventListener("pointerup",endPtr);wrap.addEventListener("pointercancel",endPtr);
 wrap.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){if(activate(e.target))e.preventDefault()}});
-function activate(t){const h=t.closest&&t.closest("[data-place],[data-region]");if(!h)return false;go(h.dataset.region,h.dataset.place||null);return true}
-const zoomBy=f=>{const c=[vb[0]+vb[2]/2,vb[1]+vb[3]/2],w=Math.max(ZMIN,Math.min(ZMAX,(zt?zt.w:vb[2])*f));homeLock=false;fly([c[0]-w/2,c[1]-w/AR/2,w],520)};
+function activate(t){const tw=t.closest&&t.closest("[data-trip]");if(tw){walkTo(tw.dataset.trip);return true}const h=t.closest&&t.closest("[data-place],[data-region]");if(!h)return false;go(h.dataset.region,h.dataset.place||null);return true}
+const zoomBy=f=>{if(tripLock)return;if(camHook)camHook();const c=[vb[0]+vb[2]/2,vb[1]+vb[3]/2],w=Math.max(ZMIN,Math.min(ZMAX,(zt?zt.w:vb[2])*f));homeLock=false;fly([c[0]-w/2,c[1]-w/AR/2,w],520)};
 document.getElementById("zin").onclick=()=>zoomBy(1/1.6);
 document.getElementById("zout").onclick=()=>zoomBy(1.6);
-document.getElementById("zall").onclick=()=>go("sea",null);
-document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!/INPUT|TEXTAREA/.test(document.activeElement.tagName)&&document.getElementById("tome").hidden&&document.getElementById("guide").hidden)go("sea",null)});
+document.getElementById("zall").onclick=()=>{if(!tripLock)go("sea",null)};
+document.addEventListener("keydown",e=>{if(e.key!=="Escape")return;if(tripLock){skipTrip();return}if(!/INPUT|TEXTAREA/.test(document.activeElement.tagName)&&document.getElementById("tome").hidden&&document.getElementById("guide").hidden)go("sea",null)});
 if(window.ResizeObserver)new ResizeObserver(()=>{CB=null;box();vb=homeLock?homeVB():clampVB(vb);commitVB()}).observe(clipEl);
 
 /* a soft painted copy of the whole chart, shown at the edges of the view while the camera moves */
@@ -2463,7 +2555,7 @@ const cur={region:"harbor",place:null,tab:"road"};
 function go(rid,pid,keep){cur.region=rid;cur.place=pid;setCrystals(rid);wsel="c";linkFrom=null;
  drawWorld();renderBook();
  const p=pid&&placeById(pid);homeLock=rid==="sea"&&!pid;
- fly(p&&(rid==="sea"||rid==="source")?[p.x-210,p.y-168,420]:regionVB(rid));
+ if(!keep){if(walking)tripCamOff();fly(p&&(rid==="sea"||rid==="source")?[p.x-210,p.y-168,420]:regionVB(rid))}
  document.getElementById("page").scrollTop=0}
 function toast(t){const el=document.getElementById("toast");el.textContent=t;el.classList.add("on");clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove("on"),2600)}
 function renderTopline(){const lands=REGIONS.filter(r=>!r.sea);const n=lands.filter(r=>explored(r.id)).length;
@@ -2819,14 +2911,161 @@ function buildGuide(){const el=document.getElementById("guide");if(!el||el.datas
  <header class="ghead"><p class="gkick">the traveller’s guide to</p><h1 id="gTitle">The Psychedelic Realm</h1>
   <p class="gintro">Before you lies a book of sea-charts for the inner voyage. Nine shores rise from one sea, and each keeps an old myth: the lotus coast where the senses bloom, the isle of two springs where memory is kept, the black crags where the Gorgon waits, the fires of Tartarus where a stone is rolled uphill, the dark hall of the Mysteries. Every place on them is a theme your soul may wander into: a fear, a strength, a memory, a purpose. The tales are not to be believed, only walked through, the way one walks through a dream. Prepare in the Harbour, sail where your question leads, and bring home what you find.</p></header>
  <ol class="ggrid">${GUIDE.map(([t,d,how],i)=>`<li class="gcard"><div class="gplate">${guideArt(i)}<span class="gnum">${ROMAN[i]}</span></div><div class="gtext"><h3>${t}</h3><p>${d}</p>${how?`<p class="ghow">${how}</p>`:""}</div></li>`).join("")}</ol>
- <footer class="gfoot"><span>Drag to wander · Wheel to come closer · <b>Esc</b> to see the whole realm · the <b>?</b> seal opens this guide again</span><button class="gbtn" id="gGo">Begin the voyage</button></footer></div>`;
+ <footer class="gfoot"><span class="gq"><b>How will you travel?</b> Drag to wander · wheel to come closer · <b>Esc</b> for the whole realm · the <b>?</b> seal opens this guide, the spiral switches the way you travel</span><div class="gmodes"><button class="gbtn mode sober" id="gSober">Sober<small>read the atlas at your own pace</small></button><button class="gbtn mode tripb" id="gTrip">Tripping right now<small>let the realm draw you in</small></button></div></footer></div>`;
  const close=()=>{el.hidden=true;try{localStorage.setItem(GUIDE_KEY,"1")}catch(e){}document.getElementById("helpBtn").focus()};
- el.querySelector("#gClose").onclick=close;el.querySelector("#gGo").onclick=close;
+ el.querySelector("#gClose").onclick=close;el.querySelector("#gSober").onclick=()=>{close();if(MODE==="trip")exitTrip()};el.querySelector("#gTrip").onclick=()=>{close();enterTrip()};
  el.addEventListener("click",e=>{if(e.target===el)close()});
  el.addEventListener("keydown",e=>{if(e.key==="Escape"){e.stopPropagation();close()}});}
-function openGuide(){buildGuide();const el=document.getElementById("guide");el.hidden=false;el.querySelector(".gpanel").scrollTop=0;setTimeout(()=>el.querySelector("#gGo").focus({preventScroll:true}),30)}
+function openGuide(){buildGuide();const el=document.getElementById("guide");el.hidden=false;el.querySelector(".gpanel").scrollTop=0;setTimeout(()=>el.querySelector("#gSober").focus({preventScroll:true}),30)}
 document.getElementById("helpBtn").onclick=openGuide;
 (()=>{let seen=false;try{seen=!!localStorage.getItem(GUIDE_KEY)}catch(e){}if(!seen)openGuide()})();
+/* ======================= TRIPPING RIGHT NOW ======================= */
+/* Two ways to travel the atlas. Sober: read it at your own pace.
+   Tripping right now: the realm breathes, draws you down into the Sea Without Shores,
+   and from there footsteps lead out to every island; choose one and walk it. */
+const NS="http://www.w3.org/2000/svg",tsv=document.getElementById("trip"),inner=document.querySelector(".mapinner");
+let MODE="sober",tripLock=false,tripRun=0,TRIP=null,walkRun=0,walking=false,camFollow=false,walkRaf=0,phT=0,capT=0;
+const EZ={in:k=>k*k*k,out:k=>1-Math.pow(1-k,3),io:k=>k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2,sine:k=>-(Math.cos(Math.PI*k)-1)/2};
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+const reduceMotion=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
+const painted=()=>!!(TEX&&TEX.terr&&Object.keys(TEX.terr).length>=REGIONS.filter(r=>r.path).length);
+/* a camera move that can be awaited; the zoom eases on a log scale */
+function camTo(t,dur,ez=EZ.io,onStep){t=clampVB(t);cancelAnimationFrame(anim);zt=null;const f=vb.slice(),t0=performance.now(),lw0=Math.log(f[2]),lw1=Math.log(t[2]),c0=[f[0]+f[2]/2,f[1]+f[3]/2],c1=[t[0]+t[2]/2,t[1]+t[3]/2];
+ return new Promise(res=>{pendingCam=res;const step=now=>{const k=dur?Math.min(1,(now-t0)/dur):1,e=ez(k),w=Math.exp(lw0+(lw1-lw0)*e);vb=[c0[0]+(c1[0]-c0[0])*e-w/2,c0[1]+(c1[1]-c0[1])*e-w/AR/2,w,w/AR];if(onStep)onStep(k,e);
+  if(k<1){moveVB();anim=requestAnimationFrame(step)}else{anim=null;vb=t;commitVB();if(pendingCam===res)pendingCam=null;res()}};anim=requestAnimationFrame(step)})}
+function tripCamOff(){camFollow=false;if(pendingCam){const r=pendingCam;pendingCam=null;r()}}
+const svgEl=(tag,attrs)=>{const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);return e};
+/* ---------- the ways: from the rim of the Sea Without Shores to the shore of every island ---------- */
+const bez=(P,t)=>{const u=1-t;return[0,1].map(i=>u*u*u*P[0][i]+3*u*u*t*P[1][i]+3*u*t*t*P[2][i]+t*t*t*P[3][i])};
+function sampleWay(P){const pts=[];for(let i=0;i<=240;i++)pts.push(bez(P,i/240));const L=[0];for(let i=1;i<pts.length;i++)L.push(L[i-1]+Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]));return{pts,L,len:L[L.length-1]}}
+function atLen(S,d){let lo=0,hi=S.L.length-1;while(hi-lo>1){const m=(lo+hi)>>1;S.L[m]<d?lo=m:hi=m}const t=(d-S.L[lo])/((S.L[hi]-S.L[lo])||1),a=S.pts[lo],b=S.pts[hi],dx=b[0]-a[0],dy=b[1]-a[1],l=Math.hypot(dx,dy)||1;return{x:a[0]+dx*t,y:a[1]+dy*t,dx:dx/l,dy:dy/l}}
+const FOOT=`<g id="fpI"><ellipse cx=".3" cy="-2.05" rx="1.6" ry="1.5"/><ellipse cx="-.25" cy="2.35" rx="1.22" ry="1.38"/><path d="M-1.42,2.3C-1.72,.6 -1.66,-.9 -1.26,-2.2L.25,-2.05C.02,-.55 -.18,.85 -.05,2.05Z"/>
+ <circle cx="1.18" cy="-4.28" r=".8"/><circle cx="0" cy="-4.8" r=".52"/><circle cx="-.82" cy="-4.62" r=".45"/><circle cx="-1.48" cy="-4.24" r=".39"/><circle cx="-1.98" cy="-3.68" r=".33"/></g>`;
+/* the red letters: the whole name where the way is long enough, a shorter one where it is not */
+const WAYNAME={harbor:"to the Harbour of Intention",senses:"to the Isle of the Senses",memory:"to the Isle of Memory",shadow:"to Shadow & Strength",heart:"to the Isle of Connection",purpose:"to Tartarus",mystery:"to the Mysteries",integration:"to the Shores of Return"};
+function buildWays(){const lands=REGIONS.filter(r=>r.path),SRC=[600,480],ways=[];
+ let defs=`<defs>${FOOT}<g id="fpL"><use href="#fpI" class="fp-bleed" transform="scale(1.14)"/><use href="#fpI" class="fp-ink"/></g><g id="fpR"><use href="#fpL" transform="scale(-1 1)"/></g>
+  <path id="srcRing" d="M600,568A88,88 0 1 1 600.01,568Z"/>`;
+ let body=`<g class="ways">`;
+ lands.forEach((r,i)=>{const a=Math.atan2(SRC[1]-r.cy,SRC[0]-r.cx),end=r.at(a,.86),dx=end[0]-SRC[0],dy=end[1]-SRC[1],D=Math.hypot(dx,dy),ux=dx/D,uy=dy/D,st=[SRC[0]+ux*97,SRC[1]+uy*97],L=Math.hypot(end[0]-st[0],end[1]-st[1]),n=[-uy,ux];
+  /* try a few bends and keep the one that crosses the fewest other islands */
+  let best=null;[.13,-.13,.22,-.22,.05,-.05,.3,-.3].forEach((b,bi)=>{const P=[st,[st[0]+(end[0]-st[0])*.33+n[0]*L*b,st[1]+(end[1]-st[1])*.33+n[1]*L*b],[st[0]+(end[0]-st[0])*.68+n[0]*L*b*.55,st[1]+(end[1]-st[1])*.68+n[1]*L*b*.55],end];
+   let hit=0;for(let k=1;k<=40;k++){const t=k/40,[x,y]=bez(P,t);lands.forEach(o=>{if(o===r&&t>.6)return;const q=((x-o.cx)/(o.r*o.sx*1.1))**2+((y-o.cy)/(o.r*o.sy*1.1))**2;if(q<1)hit++})}
+   const score=hit*10+bi*.01;if(!best||score<best.score)best={P,score}});
+  const P=best.P,S=sampleWay(P),steps=[];
+  for(let d=5,k=0;d<S.len-1;d+=10.5,k++){const q=atLen(S,d),side=k%2?1:-1;steps.push({cx:q.x,cy:q.y,dx:q.dx,dy:q.dy,x:q.x-q.dy*2.7*side,y:q.y+q.dx*2.7*side,a:Math.atan2(q.dy,q.dx)*180/Math.PI+90,l:side<0})}
+  /* the red letters run beside the way, always readable from left to right */
+  const txt=WAYNAME[r.id]||("to the "+r.name);let fs=13.5;while(txt.length*fs*.46>S.len*.9&&fs>10)fs-=.5;
+  let off=[];for(let k=0;k<=S.pts.length-1;k+=6){const p=S.pts[k],q=S.pts[Math.min(S.pts.length-1,k+1)],p0=S.pts[Math.max(0,k-1)],tx=q[0]-p0[0],ty=q[1]-p0[1],l=Math.hypot(tx,ty)||1;off.push([p[0],p[1],-ty/l,tx/l])}
+  const up=off.reduce((s,o)=>s+o[3],0)>0?-1:1;let lp=off.map(o=>[o[0]+o[2]*up*(fs*.62+3),o[1]+o[3]*up*(fs*.62+3)]);if(lp[lp.length-1][0]<lp[0][0])lp.reverse();
+  defs+=`<path id="wl-${r.id}" d="M${lp.map(p=>p[0].toFixed(1)+","+p[1].toFixed(1)).join("L")}"/>`;
+  const dP=`M${P[0].map(v=>v.toFixed(1))}C${P[1].map(v=>v.toFixed(1))} ${P[2].map(v=>v.toFixed(1))} ${P[3].map(v=>v.toFixed(1))}`;
+  body+=`<g class="way" data-trip="${r.id}" style="--i:${i}">
+   <path class="road" d="${dP}" pathLength="1"/><path class="dots" d="${dP}"/>
+   <g class="fps">${steps.map((s,k)=>`<g transform="translate(${s.x.toFixed(1)} ${s.y.toFixed(1)}) rotate(${s.a.toFixed(1)}) scale(1.22)"><use href="#${s.l?"fpL":"fpR"}" style="--d:${(.35+1.25*k/steps.length).toFixed(2)}"/></g>`).join("")}</g>
+   <g class="phs">${"<g class=\"ph\"><use href=\"#fpL\"/></g>".repeat(7)}</g>
+   <path class="hit" d="${dP}" data-trip="${r.id}"/>
+   <text class="lab" data-trip="${r.id}" font-size="${fs.toFixed(1)}" tabindex="0" role="button" aria-label="Follow the footsteps ${esc(txt)}"><textPath href="#wl-${r.id}" startOffset="52%" text-anchor="middle">${[...txt].map((ch,ci)=>`<tspan style="--c:${ci}">${esc(ch)}</tspan>`).join("")}</textPath></text></g>`;
+  ways.push({rid:r.id,steps,len:S.len,end})});
+ const ring="✦ every way begins here ✦ in the Sea Without Shores ";
+ body+=`</g><text class="srcring" font-size="9"><textPath href="#srcRing">${[...ring].map((ch,ci)=>`<tspan style="--c:${ci}">${esc(ch)}</tspan>`).join("")}</textPath></text><g class="trail"></g>`;
+ tsv.innerHTML=defs+`</defs>`+body;tsv.setAttribute("class","");
+ const els=[...tsv.querySelectorAll(".way")];
+ ways.forEach((w,i)=>{w.el=els[i];w.ph=[...els[i].querySelectorAll(".ph")]});
+ TRIP={ways,trail:tsv.querySelector(".trail")};return TRIP}
+/* faint walkers going out along every way, step by step, before you choose */
+function phantoms(on){clearInterval(phT);phT=0;if(!on||!TRIP)return;TRIP.ways.forEach(w=>{w.pi=-Math.floor(Math.random()*16);w.pk=0});
+ phT=setInterval(()=>{if(walking||document.hidden||moving||!TRIP)return;TRIP.ways.forEach(w=>{w.pi++;if(w.pi<0)return;if(w.pi>=w.steps.length){w.pi=-Math.floor(8+Math.random()*18);return}
+  const s=w.steps[w.pi],g=w.ph[w.pk++%w.ph.length],u=g.firstChild;g.setAttribute("transform",`translate(${s.x.toFixed(1)} ${s.y.toFixed(1)}) rotate(${s.a.toFixed(1)}) scale(1.22)`);u.setAttribute("href",s.l?"#fpL":"#fpR");
+  if(u.animate)u.animate([{opacity:0,transform:"scale(1.25)"},{opacity:.8,transform:"scale(1)",offset:.1},{opacity:.62,offset:.45},{opacity:0}],{duration:2600,easing:"ease-out"})})},360)}
+/* a footprint pressed into the parchment */
+function stamp(g,s,col){if(col){const k=svgEl("circle",{cx:s.x.toFixed(1),cy:s.y.toFixed(1),r:"3",class:"spark",style:`stroke:${col}`});g.appendChild(k);if(k.animate)k.animate([{transform:"scale(.6)",opacity:.85},{transform:"scale(3.2)",opacity:0}],{duration:900,easing:"ease-out",fill:"forwards"}).onfinish=()=>k.remove();else k.remove()}
+ const o=svgEl("g",{transform:`translate(${s.x.toFixed(1)} ${s.y.toFixed(1)}) rotate(${s.a.toFixed(1)}) scale(1.28)`}),u=svgEl("use",{href:s.l?"#fpL":"#fpR",class:"tp"});o.appendChild(u);g.appendChild(o);
+ if(u.animate)u.animate([{opacity:0,transform:"scale(1.45)"},{opacity:.96,transform:"scale(1)",offset:.05},{opacity:.92,offset:.3},{opacity:.36}],{duration:8000,easing:"ease-out",fill:"forwards"});else u.style.opacity=.8}
+/* the drift of the moving sheet from where it was last drawn, as a share of the view */
+function camDrift(){const b=box(),sC=sOf(vbC),sV=sOf(vb);return Math.max(Math.abs((vbC[0]+vbC[2]/2-vb[0]-vb[2]/2)*sV)/b.w,Math.abs((vbC[1]+vbC[3]/2-vb[1]-vb[3]/2)*sV)/b.h,Math.abs(Math.log(sV/sC))/1.6)}
+/* walk a way: footsteps appear one by one and the camera follows them to the island */
+async function walkTo(rid){if(!TRIP||tripLock)return;const w=TRIP.ways.find(v=>v.rid===rid);if(!w)return;
+ const run=++walkRun;walking=true;cancelAnimationFrame(walkRaf);camFollow=true;camHook=tripCamOff;phantoms(false);
+ tsv.classList.add("walking");TRIP.ways.forEach(v=>v.el.classList.toggle("sel",v===w));TRIP.trail.innerHTML="";
+ const col=(CRYS_COL[rid]||CRYS_COL.sea)[1],lamp=svgEl("circle",{r:"26",class:"lamp",cx:w.steps[0].cx.toFixed(1),cy:w.steps[0].cy.toFixed(1)});lamp.style.setProperty("--lc",col);TRIP.trail.appendChild(lamp);
+ const red=reduceMotion(),WW=Math.max(ZMIN*1.5,Math.min(420,ZMAX)),s0=w.steps[0];
+ caption("You walk toward the "+RMAP[rid].name+"…",{ink:1,hold:3600});
+ if(!red)await camTo([s0.cx+s0.dx*40-WW/2,s0.cy+s0.dy*40-WW/AR/2,WW],1300,EZ.io);
+ if(run!==walkRun)return;
+ const SD=red?40:290,t0=performance.now();let shown=0,last=t0,cx=vb[0]+vb[2]/2,cy=vb[1]+vb[3]/2,ww=vb[2];
+ await new Promise(res=>{const step=now=>{if(run!==walkRun)return res();const el=(now-t0)/SD,n=w.steps.length;
+  while(shown<n&&shown<=el){stamp(TRIP.trail,w.steps[shown],col);shown++}
+  {const i=Math.min(n-1,Math.floor(el)),j=Math.min(n-1,i+1),f=Math.min(1,el-Math.floor(el));lamp.setAttribute("cx",(w.steps[i].cx+(w.steps[j].cx-w.steps[i].cx)*f).toFixed(1));lamp.setAttribute("cy",(w.steps[i].cy+(w.steps[j].cy-w.steps[i].cy)*f).toFixed(1))}
+  if(camFollow&&!red){const i=Math.min(n-1,Math.floor(el)),j=Math.min(n-1,i+1),f=Math.min(1,el-Math.floor(el)),a=w.steps[i],b=w.steps[j],px=a.cx+(b.cx-a.cx)*f,py=a.cy+(b.cy-a.cy)*f,dt=Math.min(64,now-last),kk=1-Math.exp(-dt/340),prog=Math.min(1,el/n),tw=WW*(1+.6*Math.max(0,(prog-.55)/.45));
+   cx+=(px+a.dx*22-cx)*kk;cy+=(py+a.dy*22-cy)*kk;ww+=(tw-ww)*kk;vb=[cx-ww/2,cy-ww/AR/2,ww,ww/AR];moveVB();if(camDrift()>.17)commitVB()}
+  last=now;if(shown>=n&&el>n+1.2)return res();walkRaf=requestAnimationFrame(step)};walkRaf=requestAnimationFrame(step)});
+ if(run!==walkRun)return;
+ if(lamp.animate)lamp.animate([{opacity:1},{opacity:0}],{duration:2200,fill:"forwards"});
+ arrive(w);
+ if(camFollow&&!red)await camTo(regionVB(rid),1600,EZ.io);
+ if(run!==walkRun)return;
+ walking=false;camHook=null;camFollow=false;tsv.classList.remove("walking");TRIP.ways.forEach(v=>v.el.classList.remove("sel"));
+ go(rid,null,true);toast("You have reached the "+RMAP[rid].name);setTimeout(()=>{if(MODE==="trip"&&!walking)phantoms(true)},4000)}
+/* arriving: rings spread from the last step and the island's name is written in red */
+function arrive(w){const e=w.steps[w.steps.length-1],g=TRIP.trail,name=RMAP[w.rid].name;
+ for(let i=0;i<3;i++){const c=svgEl("circle",{cx:e.cx.toFixed(1),cy:e.cy.toFixed(1),r:"5",class:"rip"});g.appendChild(c);if(c.animate)c.animate([{transform:"scale(.5)",opacity:.9},{transform:"scale(6.5)",opacity:0}],{duration:2400,delay:i*420,easing:"cubic-bezier(.2,.6,.3,1)",fill:"both"})}
+ const t=svgEl("text",{x:e.cx.toFixed(1),y:(e.cy-17).toFixed(1),class:"insc","text-anchor":"middle","font-size":"15"});t.innerHTML=[...name].map((ch,ci)=>`<tspan style="--c:${ci}">${esc(ch)}</tspan>`).join("");g.appendChild(t);
+ setTimeout(()=>{if(t.animate)t.animate([{opacity:1},{opacity:0}],{duration:1800,fill:"forwards"}).onfinish=()=>t.remove();else t.remove()},9000)}
+/* ---------- the visions on the way in ---------- */
+function mandala(k){const T=6.2832,f=v=>v.toFixed(2),g=[];
+ const stops=["#ff2d6f","#ffb02d","#e8ff2d","#2dff8a","#2dd5ff","#7a2dff","#ff2dd5"].map((c,i,a)=>`<stop offset="${(i/(a.length-1)).toFixed(2)}" stop-color="${c}"/>`).join("");
+ if(k===0){const r=17;g.push(`<circle r="${r}"/>`);for(let i=0;i<6;i++){const a=i/6*T;g.push(`<circle cx="${f(Math.cos(a)*r)}" cy="${f(Math.sin(a)*r)}" r="${r}"/>`)}for(let i=0;i<12;i++){const a=i/12*T+T/24;g.push(`<circle cx="${f(Math.cos(a)*r*1.93)}" cy="${f(Math.sin(a)*r*1.93)}" r="${r}" opacity=".55"/>`)}g.push(`<circle r="${r*3}"/><circle r="${r*3.15}" stroke-width=".3"/>`)}
+ if(k===1){for(let i=0;i<24;i++)g.push(`<ellipse cy="-60" rx="4.6" ry="15" transform="rotate(${i*15})"/>`);let st="";for(let i=0;i<24;i++){const a=i/24*T-T/4,rr=i%2?52:74;st+=(i?"L":"M")+f(Math.cos(a)*rr)+","+f(Math.sin(a)*rr)}g.push(`<path d="${st}Z"/>`);let s2="";for(let i=0;i<16;i++){const a=i/16*T,rr=i%2?40:66;s2+=(i?"L":"M")+f(Math.cos(a)*rr)+","+f(Math.sin(a)*rr)}g.push(`<path d="${s2}Z" opacity=".7"/>`)}
+ if(k===2){for(let i=0;i<72;i++){const a=i/72*T;g.push(`<circle cx="${f(Math.cos(a)*88)}" cy="${f(Math.sin(a)*88)}" r="${i%6?.9:2.2}" fill="url(#mg${k})" stroke="none"/>`)}g.push(`<circle r="94"/><circle r="81"/><circle r="97" stroke-dasharray="1 3"/>`);for(let i=0;i<36;i++){const a=i/36*T;g.push(`<path d="M${f(Math.cos(a)*81)},${f(Math.sin(a)*81)}L${f(Math.cos(a)*94)},${f(Math.sin(a)*94)}" stroke-width=".35"/>`)}}
+ return`<svg viewBox="-100 -100 200 200" aria-hidden="true"><defs><linearGradient id="mg${k}" x1="0" y1="0" x2="1" y2="1">${stops}</linearGradient></defs><g fill="none" stroke="url(#mg${k})" stroke-width="${k===2?.8:.7}">${g.join("")}</g></svg>`}
+function buildFX(){const el=document.getElementById("tripfx");if(!el.dataset.built){el.dataset.built=1;
+ el.innerHTML=`<div class="tf hue"></div><div class="tf mand m0"><div class="spin">${mandala(0)}</div></div><div class="tf mand m1"><div class="spin">${mandala(1)}</div></div><div class="tf mand m2"><div class="spin">${mandala(2)}</div></div>
+  <div class="tf tun">${"<i></i>".repeat(7)}</div><div class="tf vig"></div><div class="tf flash"></div><div class="tskip">touch anywhere to skip</div>`;
+ el.addEventListener("click",skipTrip)}
+ el.className="tripfx";return el}
+/* captions written across the map: glowing during the visions, red ink afterwards */
+function caption(t,o={}){const c=document.getElementById("tcap");clearTimeout(capT);c.classList.remove("show");
+ capT=setTimeout(()=>{c.textContent=t||"";c.classList.toggle("ink",!!o.ink);if(t){void c.offsetWidth;c.classList.add("show");if(o.hold)capT=setTimeout(()=>c.classList.remove("show"),o.hold)}},t?420:0)}
+function waysVB(){const h=homeVB(),w=h[2]*.9;return[600-w/2,476-w/AR/2,w]}
+function setModeBtn(){const b=document.getElementById("modeBtn");if(!b)return;const on=MODE==="trip";b.classList.toggle("on",on);b.setAttribute("aria-pressed",on);
+ b.title=on?"Tripping right now · touch to come back to sober":"Sober · touch if you are tripping right now";b.setAttribute("aria-label",b.title)}
+/* ---------- entering the trip ---------- */
+async function enterTrip(){const run=++tripRun,alive=()=>run===tripRun&&MODE==="trip";walkRun++;walking=false;cancelAnimationFrame(walkRaf);phantoms(false);
+ MODE="trip";setModeBtn();wrap.classList.add("trip");buildWays();
+ if(reduceMotion()){go("source",null,true);fly(waysVB());tsv.classList.add("show");caption("Choose your way, and follow the footsteps.",{ink:1,hold:5000});phantoms(true);return}
+ tripLock=true;const fx=buildFX();fx.hidden=false;requestAnimationFrame(()=>{if(alive())fx.classList.add("on")});
+ await camTo(homeVB(),900,EZ.io);if(!alive())return;
+ /* breathe, at least once, and until the realm is fully painted */
+ for(let b=0;b<6;b++){caption("Breathe in…");const hv=homeVB();fx.classList.add("in");
+  await camTo([hv[0]+hv[2]*.035,hv[1]+hv[3]*.035,hv[2]*.93],1700,EZ.sine,(k,e)=>{inner.style.transform=`rotate(${(-2.5*e).toFixed(2)}deg)`});if(!alive())return;
+  caption("…and let go.");fx.classList.remove("in");
+  await camTo(hv,1700,EZ.sine,(k,e)=>{inner.style.transform=`rotate(${(-2.5*(1-e)).toFixed(2)}deg)`});if(!alive())return;
+  if(painted())break}
+ /* the fall into the source */
+ caption("Let the realm draw you inward…");fx.classList.add("dive");
+ await camTo([600-120,480-96,240],3400,EZ.in,(k,e)=>{inner.style.transform=`rotate(${(-17*e).toFixed(2)}deg) scale(${(1+.04*Math.sin(k*Math.PI*4)*(1-k)).toFixed(4)})`;if(k>.84&&!fx.classList.contains("flash"))fx.classList.add("flash")});if(!alive())return;
+ /* at the bottom of the fall the book opens on the Sea Without Shores, and the stones take every colour */
+ go("source",null,true);
+ caption("Every way begins in the Sea Without Shores.");
+ await wait(650);if(!alive())return;
+ fx.classList.remove("dive");fx.classList.add("emerge");
+ await camTo(waysVB(),3000,EZ.out,(k,e)=>{inner.style.transform=`rotate(${(-17*(1-e)).toFixed(2)}deg)`});if(!alive())return;
+ inner.style.transform="";tsv.classList.add("show");
+ await wait(500);if(!alive())return;
+ caption("Choose your way, and follow the footsteps.",{ink:1,hold:6500});
+ fx.classList.remove("on");tripLock=false;
+ setTimeout(()=>{if(alive()){fx.hidden=true;fx.className="tripfx"}},1500);
+ setTimeout(()=>{if(alive()&&!walking)phantoms(true)},2600)}
+function skipTrip(){if(!tripLock)return;const run=++tripRun;cancelAnimationFrame(anim);anim=null;pendingCam=null;inner.style.transform="";tripLock=false;
+ const fx=document.getElementById("tripfx");fx.className="tripfx";fx.hidden=true;go("source",null,true);vb=clampVB(waysVB());commitVB();tsv.classList.add("show");
+ caption("Choose your way, and follow the footsteps.",{ink:1,hold:5500});setTimeout(()=>{if(run===tripRun&&MODE==="trip"&&!walking)phantoms(true)},2400)}
+function exitTrip(){tripRun++;walkRun++;walking=false;cancelAnimationFrame(walkRaf);phantoms(false);camHook=null;camFollow=false;MODE="sober";setModeBtn();wrap.classList.remove("trip");
+ if(tripLock){cancelAnimationFrame(anim);anim=null;pendingCam=null;commitVB()}tripLock=false;inner.style.transform="";
+ const fx=document.getElementById("tripfx");fx.className="tripfx";fx.hidden=true;caption("");
+ tsv.classList.add("gone");setTimeout(()=>{if(MODE==="sober"){tsv.innerHTML="";tsv.setAttribute("class","");TRIP=null}},700)}
+document.getElementById("modeBtn").onclick=()=>{MODE==="trip"?exitTrip():enterTrip()};
+setModeBtn();
 </script>
 
 </body></html>
