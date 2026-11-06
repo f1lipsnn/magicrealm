@@ -1,3 +1,3 @@
 # magicrealm
 Psychadelic realm guide 
-f1lipsnn.github.io/magicrealm
+Web: https://f1lipsnn.github.io/magicrealm
